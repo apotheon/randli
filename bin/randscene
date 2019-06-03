@@ -2,7 +2,7 @@
 require 'yaml'
 
 def display_img selection
-  system "feh -B black -rz. #{selection}"
+  exec "feh -B black -rz. #{selection} &"
 end
 
 campaign = ARGV.pop
