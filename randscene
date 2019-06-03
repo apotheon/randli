@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+def display_img selection
+  exec "feh -B black -rz. #{selection}"
+end
+
+campaign = ARGV.pop
+
+images = File.readlines "/home/ren/notes/#{campaign}_imgpaths.txt"
+
+names = File.readlines "/home/ren/notes/#{campaign}_charnames.txt"
+
+list = (images + names).flatten
+
+n = rand list.size
+
+if n < images.size
+  display_img list[n]
+else
+  puts list[n]
+end
