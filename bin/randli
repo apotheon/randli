@@ -7,7 +7,7 @@ end
 
 campaign = ARGV.pop
 
-datafile = File.join ENV['HOME'], 'data/randscene', "#{campaign}.yaml"
+datafile = File.join ENV['HOME'], 'data/randli', "#{campaign}.yaml"
 lists = YAML.load_file datafile
 
 list = (lists['images'] + lists['names']).flatten
