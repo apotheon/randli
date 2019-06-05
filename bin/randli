@@ -1,21 +1,30 @@
 #!/usr/bin/env ruby
-require 'yaml'
 
-def display_img selection
-  exec "feh -B black -rz. #{selection} &"
+@config = Hash.new
+
+@config_file = (File.join ENV['HOME'], '.randli')
+
+if File.exist? @config_file
+  IO.readlines(@config_file).each do |line|
+    part = line.partition ': '
+    @config[part.first] = part.last
+  end
 end
 
-campaign = ARGV.pop
+@listfile = File.join ENV['HOME'], 'data/randli', "#{ARGV.last}.list"
 
-datafile = File.join ENV['HOME'], 'data/randli', "#{campaign}.yaml"
-lists = YAML.load_file datafile
+Array.new.tap do |list|
+  IO.readlines(@listfile).each do |line|
+    list << line.partition(': ')
+  end
 
-list = (lists['images'] + lists['names']).flatten
-
-n = rand list.size
-
-if n < lists['images'].size
-  display_img list[n]
-else
-  puts list[n]
+  list.sample.tap do |selection|
+    selection.last.chomp.tap do |value|
+      if @config[selection.first]
+        exec @config[selection.first].gsub /\$\{value\}/, value
+      else
+        puts value
+      end
+    end
+  end
 end
